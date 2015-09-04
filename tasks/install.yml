@@ -3,11 +3,21 @@
   apt: >
     update_cache=yes
     cache_valid_time=3600
+  when: ansible_os_family == "Debian"
 
-- name: install deps
+- name: install deps for Debian-type system
   apt: >
     pkg={{item}}
     state=installed
+  with_items:
+    - unzip
+    - jq
+  when: ansible_os_family == "Debian"
+
+- name: install deps for SUSE-type system
+  zypper: >
+    pkg={{item}}
+    state=latest
   with_items:
     - unzip
     - jq
