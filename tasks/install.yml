@@ -22,11 +22,19 @@
     - unzip
     - jq
 
-- name: download consul
+- name: copy local consul package
+  copy: >
+    src={{consul_local_pkg}}
+    dest={{consul_download_folder}}
+  register: consul_was_downloaded
+  when: consul_local_pkg is defined
+
+- name: download consul from url
   get_url: >
     url={{consul_download}}
     dest={{consul_download_folder}}
   register: consul_was_downloaded
+  when: consul_local_pkg is undefined
 
 - name: create consul group
   group: >
